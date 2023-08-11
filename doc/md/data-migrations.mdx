@@ -79,7 +79,7 @@ func BackfillUnknown(dir *migrate.LocalDir) error {
 	w := &schema.DirWriter{Dir: dir}
 	client := ent.NewClient(ent.Driver(schema.NewWriteDriver(dialect.MySQL, w)))
 
-	// Change all empty names to 'unknown'.
+	// Change all empty names to 'Unknown'.
 	err := client.User.
 		Update().
 		Where(
@@ -94,7 +94,7 @@ func BackfillUnknown(dir *migrate.LocalDir) error {
 	// Write the content to the migration directory.
 	return w.FlushChange(
 		"unknown_names",
-		"Backfill all empty user names with default value 'unknown'.",
+		"Backfill all empty user names with default value 'Unknown'.",
 	)
 }
 ```
@@ -102,7 +102,7 @@ func BackfillUnknown(dir *migrate.LocalDir) error {
 Then, using this function in `ent/migrate/main.go` will generate the following migration file:
 
 ```sql title="migrations/20221126185750_unknown_names.sql"
--- Backfill all empty user names with default value 'unknown'.
+-- Backfill all empty user names with default value 'Unknown'.
 UPDATE `users` SET `name` = 'Unknown' WHERE `users`.`name` = '';
 ```
 
